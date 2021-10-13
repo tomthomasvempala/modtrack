@@ -1,4 +1,4 @@
-final List<Map> subjectList = [
+List subjectList = [
   {
     "subjectName": "Computer Organization and Architecture",
     "subjectCode": "COA",

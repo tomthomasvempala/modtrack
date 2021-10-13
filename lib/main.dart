@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'fetchData.dart';
 import 'subjects.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Module status '),
     );
   }
 }
@@ -32,7 +32,24 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   @override
+  void initState() {
+    gettingmyData();
+  }
+
+  void gettingmyData() async {
+    List mysubjects = await getData();
+    if (mysubjects == []) {
+      return;
+    } else {
+      subjectList = mysubjects;
+      print("data loaded");
+      setState(() {});
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    Size pageSize = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
           title: Text(widget.title),
@@ -43,16 +60,17 @@ class _MyHomePageState extends State<MyHomePage> {
             itemCount: subjectList.length,
             itemBuilder: (context, index1) {
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(subjectList[index1]["subjectCode"]),
                   Container(
-                    width: 100,
-                    height: 200,
+                    width: (pageSize.width - 2) / 6,
+                    height: pageSize.height / 1.5,
                     child: ListView.builder(
                         itemCount: 5,
                         itemBuilder: (context, index2) {
                           return Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(2.0),
                             child: GestureDetector(
                               onTap: () {
                                 subjectList[index1]["modules"][index2] =
@@ -60,14 +78,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                             1) %
                                         3;
                                 setState(() {});
-                                // subjectList[index1]["modules"][index2] =
-                                //     subjectList[index1]["modules"][index2] == 0
-                                //         ? 1
-                                //         : 0;
+                                setData(subjectList);
                               },
                               child: Container(
-                                  height: 20,
-                                  width: 20,
+                                  alignment: Alignment.center,
+                                  child: Text("${index2 + 1}"),
+                                  width: (pageSize.width - 32) / 8,
+                                  height: (pageSize.width - 2) / 8,
                                   color: subjectList[index1]["modules"]
                                               [index2] ==
                                           0

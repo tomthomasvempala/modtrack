@@ -11,8 +11,9 @@ getData() async {
   return myData;
 }
 
-void setData(List<Map> myList) async {
+void setData(List myList) async {
   SharedPreferences sP = await SharedPreferences.getInstance();
   String dataAsJSON = json.encode(myList);
   sP.setString("myData", dataAsJSON);
+  print("data koduth");
 }

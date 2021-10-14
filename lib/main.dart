@@ -38,69 +38,78 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void gettingmyData() async {
     List mysubjects = await getData();
-    if (mysubjects == []) {
+    print("yo $mysubjects");
+    if (mysubjects.length == 0) {
       return;
     } else {
       subjectList = mysubjects;
-      print("data loaded");
+      print("ho $subjectList");
       setState(() {});
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    print(subjectList.length);
     Size pageSize = MediaQuery.of(context).size;
     return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: gettingmyData,
+        ),
         appBar: AppBar(
           title: Text(widget.title),
         ),
-        body: Container(
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: subjectList.length,
-            itemBuilder: (context, index1) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(subjectList[index1]["subjectCode"]),
-                  Container(
-                    width: (pageSize.width - 2) / 6,
-                    height: pageSize.height / 1.5,
-                    child: ListView.builder(
-                        itemCount: 5,
-                        itemBuilder: (context, index2) {
-                          return Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                subjectList[index1]["modules"][index2] =
-                                    (subjectList[index1]["modules"][index2] +
-                                            1) %
-                                        3;
-                                setState(() {});
-                                setData(subjectList);
-                              },
-                              child: Container(
-                                  alignment: Alignment.center,
-                                  child: Text("${index2 + 1}"),
-                                  width: (pageSize.width - 32) / 8,
-                                  height: (pageSize.width - 2) / 8,
-                                  color: subjectList[index1]["modules"]
-                                              [index2] ==
-                                          0
-                                      ? Colors.red
-                                      : subjectList[index1]["modules"]
-                                                  [index2] ==
-                                              1
-                                          ? Colors.amber
-                                          : Colors.green),
-                            ),
-                          );
-                        }),
-                  )
-                ],
-              );
-            },
+        body: Center(
+          child: Container(
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: subjectList.length,
+              itemBuilder: (context, index1) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(subjectList[index1]["subjectCode"]),
+                    Container(
+                      width: (pageSize.width - 2) / 6,
+                      height: pageSize.height - 150,
+                      child: ListView.builder(
+                          itemCount: 5,
+                          itemBuilder: (context, index2) {
+                            return Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  subjectList[index1]["modules"][index2] =
+                                      (subjectList[index1]["modules"][index2] +
+                                              1) %
+                                          3;
+                                  setState(() {});
+                                  print("keri");
+                                  setData(subjectList);
+                                },
+                                child: Container(
+                                    alignment: Alignment.center,
+                                    child: Text("${index2 + 1}"),
+                                    width: (pageSize.width - 32) / 8,
+                                    height: (pageSize.width - 2) / 8,
+                                    color: subjectList[index1]["modules"]
+                                                [index2] ==
+                                            0
+                                        ? Colors.red
+                                        : subjectList[index1]["modules"]
+                                                    [index2] ==
+                                                1
+                                            ? Colors.amber
+                                            : Colors.green),
+                              ),
+                            );
+                          }),
+                    )
+                  ],
+                );
+              },
+            ),
           ),
         ));
   }
